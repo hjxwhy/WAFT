@@ -66,7 +66,7 @@ class WAFTv2(nn.Module):
             self.encoder = TwinsFeatureEncoder(frozen=True)
             self.factor = 32
         elif args.feature_encoder == 'dav2':
-            self.encoder = DepthAnythingFeature(model_name="vits", pretrained=True, lvl=-3)
+            self.encoder = DepthAnythingFeature(model_name="vits", pretrained=False, lvl=-3)
             self.factor = 112
         elif args.feature_encoder == 'dinov3':
             self.encoder = DinoV3Feature(model_name="vits", lvl=-3)
