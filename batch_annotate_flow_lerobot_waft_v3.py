@@ -52,8 +52,6 @@ from model import fetch_model
 from utils.utils import load_ckpt
 from inference_tools import InferenceWrapper
 
-_repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, os.path.join(_repo_root, "UFM"))
 from generate_mask import generate_robust_motion_mask
 from lerobot.datasets.video_utils import decode_video_frames_torchvision
 
@@ -683,8 +681,6 @@ def run_pipeline(wrapped_model, all_tasks, args):
     """
     device = args.device
     roi = None
-    if args.use_roi:
-        roi = (args.roi_x1, args.roi_y1, args.roi_x2, args.roi_y2)
 
     pp_args = {
         'compensate_ego_motion': args.compensate_ego_motion,
@@ -919,13 +915,6 @@ def main():
     parser.add_argument("--save_vis", action="store_true")
     parser.add_argument("--max_vis_frames", type=int, default=10)
 
-    # ROI (same as v1)
-    parser.add_argument("--use_roi", action="store_true")
-    parser.add_argument("--roi_x1", type=int, default=50)
-    parser.add_argument("--roi_y1", type=int, default=0)
-    parser.add_argument("--roi_x2", type=int, default=540)
-    parser.add_argument("--roi_y2", type=int, default=425)
-
     # Pipeline performance
     parser.add_argument("--num_prefetch_workers", type=int, default=4,
                         help="Number of processes for video decoding")
@@ -950,7 +939,6 @@ def main():
         'short_time_offset': 0.1, 'use_bidirectional': True,
         'short_min_threshold': 0.5, 'save_vis': False,
         'max_vis_frames': 10,
-        'use_roi': False, 'roi_x1': 50, 'roi_y1': 0,
         'roi_x2': 540, 'roi_y2': 425,
         'device': 'cuda' if torch.cuda.is_available() else 'cpu',
         'num_prefetch_workers': 4, 'num_postprocess_workers': 4,
@@ -986,9 +974,6 @@ def main():
     if args.compensate_ego_motion:
         print(f"Ego-motion compensation: ON "
               f"(RANSAC threshold={args.ransac_threshold}px)")
-    if args.use_roi:
-        print(f"ROI: ({args.roi_x1}, {args.roi_y1}) to "
-              f"({args.roi_x2}, {args.roi_y2})")
     print("=" * 80)
 
     # Load model
