@@ -47,9 +47,6 @@ from model import fetch_model
 from utils.utils import load_ckpt
 from inference_tools import InferenceWrapper
 
-# Add UFM to path for reusing helper functions
-_repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, os.path.join(_repo_root, "UFM"))
 
 from generate_mask import generate_mask_magnitude_threshold, generate_robust_motion_mask
 from lerobot.datasets.video_utils import decode_video_frames_torchvision
